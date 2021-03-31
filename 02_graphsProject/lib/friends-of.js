@@ -31,11 +31,49 @@
  */
 
 function friendsOfRecursion(name, adjacencyList, visited, maxDistance, currentDistance) {
-  throw new Error('Replace this error with your implementation.');
+  let recurFriends = adjacencyList[name]
+  // if (recurFriends.length === 1) return name;
+  //console.log('before adding : ', visited)
+  recurFriends.forEach(e => visited.add(e))
+  //console.log('after adding : ', visited)
+  if (currentDistance < maxDistance){
+    recurFriends.forEach(e => {
+      visited.add(...friendsOfRecursion(e, adjacencyList, visited, maxDistance, currentDistance+1))
+    })
+  }
+
+  return Array.from(visited);
 }
 
 function friendsOf(adjacencyList, name, distance) {
-  throw new Error('Replace this error with your implementation.');
+  if (!adjacencyList) return undefined;
+  if (!adjacencyList[name]) return undefined;
+
+  let  friends = adjacencyList[name]
+  // console.log(friends)
+  if (friends.length === 0) return []
+  if (friends.includes(name)) return []
+
+  // if (friends.length === 1) {
+  //   let friendsFriends = adjacencyList[friends[0]]
+  //   if (friendsFriends.length === 1){
+  //     return friends
+  //   }
+  // }
+
+  if (distance > 1){
+    let visited = new Set()
+    friends.forEach(friend =>{
+      visited.add(friend);
+      visited.add(...friendsOfRecursion(friend, adjacencyList, visited, distance, 2))
+    })
+    let visitedArray = Array.from(visited)
+    console.log(name)
+    console.log(visitedArray)
+    friends = visitedArray.filter(e => e !== name);
+
+  }
+  return friends;
 }
 
 /******************************************************************************
